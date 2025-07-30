@@ -1,0 +1,17 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Hello <span id="username"></span></h1>
+
+    <input type="text" id="nameInput" placeholder="Enter your name">
+    <button onclick="updateName()">Change your name</button>
+
+
+    <!-- link to externale js file -->
+     <script src="{{ url_for('static', filename='js/script.js')}}"></script>
+</body>
+</html>
