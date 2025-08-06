@@ -13,7 +13,10 @@ os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 def download_video():
     try:
         data = request.get_json()
+        print("📥 Incoming data:", data)
         video_url = data.get("videoURL")
+        print("📥 video_url:", video_url)
+
 
         if not video_url:
             return jsonify({"error": "No URL provided"}), 400
@@ -28,7 +31,7 @@ def download_video():
         return send_file(filepath, as_attachment=True)
 
     except Exception as e:
-        print("❌ Error:", e)
+        print("Error:", e)
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
