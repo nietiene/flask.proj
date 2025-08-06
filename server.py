@@ -79,5 +79,7 @@ def download_video():
             "type": type(e).__name__
         }), 500
 
+import urllib.request
+urllib.request.urlopen("https://www.youtube.com").read()
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
