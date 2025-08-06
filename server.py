@@ -36,24 +36,25 @@ def download_video():
         yt = YouTube(video_url)
         logger.info(f"🎬 Video title: {yt.title}")
         
-        # Get the highest resolution progressive stream
-        stream = yt.streams.filter(
-            progressive=True,
-            file_extension='mp4'
-        ).order_by('resolution').desc().first()
+        # Get highest resolution progressive mp4 stream (includes audio)
+        stream = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
         
         if not stream:
             return jsonify({"error": "No downloadable video stream found"}), 400
 
-        # Sanitize filename and create path
+        # Sanitize filename and create full path
         filename = sanitize_filename(yt.title) + ".mp4"
         filepath = os.path.join(DOWNLOAD_FOLDER, filename)
         logger.info(f"💾 Downloading to: {filepath}")
 
-        # Download the video
-        stream.download(output_path=DOWNLOAD_FOLDER, filename=filename)
-        
-        logger.info("✅ Download successful")
+        # Download video if not already downloaded
+        if not os.path.exists(filepath):
+            stream.download(output_path=DOWNLOAD_FOLDER, filename=filename)
+            logger.info("✅ Download successful")
+        else:
+            logger.info("⚠️ File already exists, skipping download")
+
+        # Send the file back to the client
         return send_file(
             filepath,
             as_attachment=True,
